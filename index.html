@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zgadnij kraj po banknocie</title>
     <style>
     body {
@@ -114,6 +115,7 @@
     <p id="feedback"></p>
         <p>Punkty: <span id="points">0</span></p>
     <button onclick="resetGame()">Następny banknot</button>
+    <p id="timer"></p>
 
 
     <script>
@@ -362,7 +364,23 @@
                 points += 10;
                 feedbackElement.innerHTML = `Brawo! Zgadłeś w ${attempts} próbie(-ach). Kraj to ${banknotes[currentIndex].country}. Ciekawostka: ${banknotes[currentIndex].fact}`;
                 pointsElement.textContent = points;
-                setTimeout(resetGame, 5000);
+
+                let timer = 5; // Ustalamy licznik na 5 sekund.
+                const timerElement = document.getElementById('timer');
+                timerElement.textContent = `Następny banknot za: ${timer}s`;
+
+                // Aktualizacja licznika co sekundę.
+                const countdown = setInterval(() => {
+                    timer--;
+                    timerElement.textContent = `Następny banknot za: ${timer}s`;
+
+                    if (timer <= 0) {
+                        clearInterval(countdown); // Zatrzymujemy odliczanie.
+                        timerElement.textContent = ''; // Usuwamy tekst licznika.
+                        resetGame(); // Resetujemy grę.
+                    }
+                }, 1000);
+
             } else {
                 if (attempts === 2) {
                     feedbackElement.innerHTML = `Nie zgadłeś! Spróbuj jeszcze raz. Liczba prób: ${attempts}. Podpowiedź: pierwsza litera kraju to ${banknotes[currentIndex].country.charAt(0)}.`;
