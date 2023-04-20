@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zgadnij kraj po banknocie</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        #banknote {
+            max-width: 300px;
+            max-height: 150px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        input, button {
+            font-size: 1rem;
+        }
+
+        input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+            display: inline-flex;
+        }
+
+        #suggestions {
+            position: absolute;
+            background-color: white;
+            z-index: 1;
+            display: none;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        #suggestions div {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        #suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zgadnij kraj po banknocie</h1>
+    <img id="banknote" src="banknote1.jpg" alt="banknot">
+    <p>Wpisz kraj, z którego pochodzi banknot:</p>
+    <div class="input-container">
+        <input type="text" id="guess" oninput="updateSuggestions()" autocomplete="off">
+        <button onclick="submitGuess()">Sprawdź</button>
+        <div id="suggestions"></div>
+    </div>
+    <p id="feedback"></p>
+        <p>Punkty: <span id="points">0</span></p>
+    <button onclick="resetGame()">Następny banknot</button>
+
+
+    <script>
+        const countries = [
+        "Afganistan",
+        "Albania",
+        "Algieria",
+        "Andora",
+        "Angola",
+        "Antigua i Barbuda",
+        "Arabia Saudyjska",
+        "Argentyna",
+        "Armenia",
+        "Australia",
+        "Austria",
+        "Azerbejdżan",
+        "Bahamy",
+        "Bahrain",
+        "Bangladesz",
+        "Barbados",
+        "Belgia",
+        "Beliz",
+        "Benin",
+        "Bhutan",
+        "Białoruś",
+        "Boliwia",
+        "Bośnia i Hercegowina",
+        "Botswana",
+        "Brazylia",
+        "Brunei",
+        "Brytania",
+        "Bułgaria",
+        "Burkina Faso",
+        "Burundi",
+        "Chile",
+        "Chiny",
+        "Chorwacja",
+        "Cypr",
+        "Czad",
+        "Czarnogóra",
+        "Czechy",
+        "Dania",
+        "Demokratyczna Republika Konga",
+        "Dominika",
+        "Dominikana",
+        "Dżibuti",
+        "Egipt",
+        "Ekwador",
+        "Erytrea",
+        "Estonia",
+        "Eswatini",
+        "Etiopia",
+        "Fidżi",
+        "Filipiny",
+        "Finlandia",
+        "Francja",
+        "Gabon",
+        "Gambia",
+        "Ghana",
+        "Grecja",
+        "Grenada",
+        "Gruzja",
+        "Gujana",
+        "Gwatemala",
+        "Gwinea",
+        "Gwinea Bissau",
+        "Gwinea Równikowa",
+        "Haiti",
+        "Hiszpania",
+        "Holandia",
+        "Honduras",
+        "Indie",
+        "Indonezja",
+        "Irak",
+        "Iran",
+        "Irlandia",
+        "Islandia",
+        "Izrael",
+        "Jamajka",
+        "Japonia",
+        "Jemen",
+        "Jordania",
+        "Kambodża",
+        "Kamerun",
+        "Kanada",
+        "Katar",
+        "Kazachstan",
+        "Kenia",
+        "Kirgistan",
+        "Kiribati",
+        "Kolumbia",
+        "Komory",
+        "Kongo",
+        "Korea Południowa",
+        "Korea Północna",
+        "Kostaryka",
+        "Kuba",
+        "Kuwejt",
+        "Laos",
+        "Lesotho",
+        "Liban",
+        "Liberia",
+        "Libia",
+        "Liechtenstein",
+        "Litwa",
+        "Luksemburg",
+        "Łotwa",
+        "Macedonia Północna",
+        "Madagaskar",
+        "Malawi",
+        "Malediwy",
+        "Malezja",
+        "Mali",
+        "Malta",
+        "Maroko",
+        "Mauretania",
+        "Mauretania",
+        "Meksyk",
+        "Mikronezja",
+        "Mjanma",
+        "Mołdawia",
+        "Monako",
+        "Mongolia",
+        "Montserrat",
+        "Mozambik",
+        "Namibia",
+        "Nauru",
+        "Nepal",
+        "Niemcy",
+        "Niger",
+        "Nigeria",
+        "Nicaragua",
+        "Norwegia",
+        "Nowa Zelandia",
+        "Oman",
+        "Pakistan",
+        "Palau",
+        "Panama",
+        "Papua-Nowa Gwinea",
+        "Paragwaj",
+        "Peru",
+        "Polska",
+        "Portugalia",
+        "Południowa Afryka",
+        "Republika Środkowoafrykańska",
+        "Republika Zielonego Przylądka",
+        "Rosja",
+        "Rumunia",
+        "Rwanda",
+        "Saint Kitts i Nevis",
+        "Saint Lucia",
+        "Saint Vincent i Grenadyny",
+        "Salwador",
+        "Samoa",
+        "San Marino",
+        "Senegal",
+        "Seszele",
+        "Sierra Leone",
+        "Singapur",
+        "Słowacja",
+        "Słowenia",
+        "Somalia",
+        "Sri Lanka",
+        "Sudan",
+        "Sudan Południowy",
+        "Surinam",
+        "Syria",
+        "Szwajcaria",
+        "Szwecja",
+        "Tadżykistan",
+        "Tajlandia",
+        "Tanzania",
+        "Togo",
+        "Tonga",
+        "Trinidad i Tobago",
+        "Tunezja",
+        "Turcja",
+        "Turkmenistan",
+        "Tuvalu",
+        "Uganda",
+        "Ukraina",
+        "Urugwaj",
+        "USA",
+        "Uzbekistan",
+        "Vanuatu",
+        "Watykan",
+        "Wenezuela",
+        "Węgry",
+        "Wielka Brytania",
+        "Wietnam",
+        "Włochy",
+        "Zambia",
+        "Zimbabwe",
+        "Zjednoczone Emiraty Arabskie",
+            // Dodaj więcej krajów
+        ];
+
+        const banknotes = [
+        { src: 'banknote1.jpg', country: 'Polska' },
+        { src: 'banknote2.jpg', country: 'USA' },
+        { src: 'banknote3.jpg', country: 'Norwegia' },
+        { src: 'banknote4.jpg', country: 'Tajlandia' },
+        { src: 'banknote5.jpg', country: 'Albania' }
+
+            // Dodaj więcej banknotów i ich kraje pochodzenia
+        ];
+
+        let currentIndex = 0;
+        let attempts = 0;
+        let points = 0;
+
+        const banknoteElement = document.getElementById('banknote');
+        const guessElement = document.getElementById('guess');
+        const suggestionsElement = document.getElementById('suggestions');
+        const feedbackElement = document.getElementById('feedback');
+        const pointsElement = document.getElementById('points');
+
+        function updateSuggestions() {
+            const inputValue = guessElement.value.trim().toLowerCase();
+            suggestionsElement.innerHTML = '';
+
+            if (inputValue.length > 0) {
+                const matchingCountries = countries.filter(country => country.toLowerCase().startsWith(inputValue));
+
+                matchingCountries.forEach(country => {
+                    const suggestion = document.createElement('div');
+                    suggestion.textContent = country;
+                    suggestion.onclick = () => {
+                        guessElement.value = country;
+                        suggestionsElement.style.display = 'none';
+                    };
+                    suggestionsElement.appendChild(suggestion);
+                });
+
+                suggestionsElement.style.display = matchingCountries.length > 0 ? 'block' : 'none';
+            } else {
+                suggestionsElement.style.display = 'none';
+            }
+        }
+
+        function submitGuess() {
+            const guess = guessElement.value.trim();
+            attempts++;
+
+            if (guess.toLowerCase() === banknotes[currentIndex].country.toLowerCase()) {
+                points += 10;
+                feedbackElement.innerHTML = `Brawo! Zgadłeś w ${attempts} próbie(-ach). Kraj to ${banknotes[currentIndex].country}. Ciekawostka: ${banknotes[currentIndex].fact}`;
+                pointsElement.textContent = points;
+                setTimeout(resetGame, 5000);
+            } else {
+                if (attempts === 2) {
+                    feedbackElement.innerHTML = `Nie zgadłeś! Spróbuj jeszcze raz. Liczba prób: ${attempts}. Podpowiedź: pierwsza litera kraju to ${banknotes[currentIndex].country.charAt(0)}.`;
+                } else if (attempts === 4) {
+                    feedbackElement.innerHTML = `Nie zgadłeś! Spróbuj jeszcze raz. Liczba prób: ${attempts}. Podpowiedź: pierwsze trzy litery kraju to ${banknotes[currentIndex].country.slice(0, 3)}.`;
+                } else if (attempts === 5) {
+                    feedbackElement.innerHTML = "Spróbujmy z innym.";
+                    setTimeout(resetGame, 2000);
+                } else {
+                    feedbackElement.innerHTML = `Nie zgadłeś! Spróbuj jeszcze raz. Liczba prób: ${attempts}.`;
+                }
+            }
+        }
+
+        function showNextBanknote() {
+            currentIndex = (currentIndex + 1) % banknotes.length;
+            banknoteElement.src = banknotes[currentIndex].src;
+        }
+
+        function resetGame() {
+            attempts = 0;
+            feedbackElement.innerHTML = '';
+            guessElement.value = '';
+            showNextBanknote();
+        }
+    </script>
+</body>
+</html>
