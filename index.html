@@ -235,7 +235,7 @@
         "Mauretania",
         "Meksyk",
         "Mikronezja",
-        "Mjanma",
+        "Birma (Mjanma)",
         "Mołdawia",
         "Monako",
         "Mongolia",
@@ -314,11 +314,14 @@
         ];
 
         const banknotes = [
-          { src: 'banknote1.jpg', country: 'Polska', fact: '(Tutaj ciekawostka o Polsce.)'},
-          { src: 'banknote2.jpg', country: 'USA', fact: '(Tutaj ciekawostka o USA.)' },
-          { src: 'banknote3.jpg', country: 'Norwegia', fact: '(Tutaj ciekawostka o Norwegii.)' },
-          { src: 'banknote4.jpg', country: 'Tajlandia', fact: '(Tutaj ciekawostka o Tajlandii.)' },
-          { src: 'banknote5.jpg', country: 'Albania', fact: '(Tutaj ciekawostka o Albanii.)' }
+          { src: 'banknote1.jpg', country: 'Birma (Mjanma)', fact: 'Generał Ne Win, dyktator Mjanmy, miał słabość do numerologii, co miało wpływ na wybór nominacji banknotów. Na przykład, 10 listopada 1985 roku wprowadzono banknot o nominale 75 kyatów, aby uczcić 75. urodziny generała. '},
+          { src: 'banknote2.jpg', country: 'USA', fact: 'Banknoty Rezerwy Federalnej w USA są wydrukowane na specjalnym papierze składającym się w 25% z lnu i w 75% z bawełny, co dodaje im unikalnej tekstury i wytrzymałości. Papier zawiera także czerwone i niebieskie włókna zabezpieczające, które są trudne do podrobienia​​.' },
+          { src: 'banknote3.jpg', country: 'Brazylia', fact: 'W 1998 roku wprowadzono drugą serię monet brazylijskiego reala, która zawierała monety ze stali pokrytej miedzią, stali pokrytej brązem, miedzioniklu oraz dwumetalowej monety z mosiądzu niklowego i miedzioniklowego.' },
+          { src: 'banknote4.jpg', country: 'Kenia', fact: 'Nowe banknoty szilinga kenijskiego, wydane w 2019 roku, mają różne tematy na swoich awersach i rewersach. Na przykład, na banknocie o nominale 1000 szilingów, na awersie znajduje się herb Kenii, statua prezydenta Jomo Kenyatty, Kenyatta International Convention Centre oraz sylwetka słonia. Na rewersie banknotu widnieje budynek parlamentu w Nairobi, symbolizujący zarządzanie​1.' },
+          { src: 'banknote5.jpg', country: 'Kirgistan', fact: 'Na rewersie banknotu o nominale 20 somów znajduje się rysunek gór Ala-Too, które są ważnym elementem krajobrazu Kirgistanu. Na awersie tego samego banknotu widnieje narodowy emblem, w którym ukazane są dwie skrzydlate konie.' },
+          { src: 'banknote6.jpg', country: 'Tonga', fact: 'Obecna seria tongańskich paanga zawiera portret panującego monarchy na przedniej stronie każdego nominału. Na odwrocie każdego nominału znajdują się obrazy związane z kulturą i historią Tonga. Banknoty o nominałach 50 i 100 paanga są wykonane z hybrydowego podłoża papierowo-polimerowego.' },
+          { src: 'banknote7.jpg', country: 'Chiny', fact: 'Banknoty chińskie są znane z zaawansowanych zabezpieczeń, które utrudniają podrabianie. Na przykład, banknoty w Renminbi (waluta Chin) są wykonane z wysokiej jakości specjalnego papieru, który zawiera włókna o różnych kolorach, a także mikrodruki, które są niewidoczne dla gołego oka. Dodatkowo, banknoty te posiadają w sobie ukryte znaki wodne, hologramy, metaliczne nitki i inne elementy zabezpieczające.' },
+          { src: 'banknote8.jpg', country: 'Rumunia', fact: 'Banknoty rumuńskie mają motywy związane z historią i kulturą kraju. Rumuńskie banknoty często przedstawiają znaczące postacie z historii i kultury Rumunii. Na przykład, na banknocie o nominale 10 lejów znajduje się wizerunek Luciana Blagi, rumuńskiego poety i dramaturga, który jest uważany za jednego z najważniejszych twórców literatury rumuńskiej.' }
 
             // Dodaj więcej banknotów i ich kraje pochodzenia
         ];
@@ -362,10 +365,10 @@
 
             if (guess.toLowerCase() === banknotes[currentIndex].country.toLowerCase()) {
                 points += 10;
-                feedbackElement.innerHTML = `Brawo! Zgadłeś w ${attempts} próbie(-ach). Kraj to ${banknotes[currentIndex].country}. Ciekawostka: ${banknotes[currentIndex].fact}`;
+                feedbackElement.innerHTML = `Brawo! Zgadłeś w ${attempts} próbie(-ach). Kraj to ${banknotes[currentIndex].country}.`;
                 pointsElement.textContent = points;
 
-                let timer = 5; // Ustalamy licznik na 5 sekund.
+                /*let timer = 15; // Ustalamy licznik na 5 sekund.
                 const timerElement = document.getElementById('timer');
                 timerElement.textContent = `Następny banknot za: ${timer}s`;
 
@@ -379,7 +382,7 @@
                         timerElement.textContent = ''; // Usuwamy tekst licznika.
                         resetGame(); // Resetujemy grę.
                     }
-                }, 1000);
+                }, 1000); */
 
             } else {
                 if (attempts === 2) {
